@@ -16,6 +16,7 @@ const calc = (num1, num2, operation) => {
     return;
   }
   const result = mapping[operation](Number(num1), Number(num2));
+  console.log(result);
 };
 
 const [, , num1, num2, operation] = process.argv;
