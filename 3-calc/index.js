@@ -1,0 +1,22 @@
+import add from './add.js';
+import multiply from './multiply.js';
+import subtract from './subtract.js';
+import divide from './divide.js';
+
+const mapping = {
+  add: add,
+  subtract: subtract,
+  multiply: multiply,
+  divide: divide,
+};
+
+const calc = (num1, num2, operation) => {
+  if (!mapping[operation]) {
+    console.log('Введена несуществующая операция. Доступны: add, subtract, multiply, divide.');
+    return;
+  }
+  const result = mapping[operation](Number(num1), Number(num2));
+};
+
+const [, , num1, num2, operation] = process.argv;
+calc(num1, num2, operation);
