@@ -12,7 +12,7 @@ const mapping = {
 
 const calc = (num1, num2, operation) => {
   if (!mapping[operation]) {
-    console.log('Введена несуществующая операция. Доступны: add, subtract, multiply, divide.');
+    console.log('Operation does not exist. Avaliable: add, subtract, multiply, divide.');
     return;
   }
   const result = mapping[operation](Number(num1), Number(num2));
