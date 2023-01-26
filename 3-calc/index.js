@@ -4,10 +4,10 @@ import subtract from './subtract.js';
 import divide from './divide.js';
 
 const mapping = {
-  add: add,
-  subtract: subtract,
-  multiply: multiply,
-  divide: divide,
+  add,
+  subtract,
+  multiply,
+  divide,
 };
 
 const calc = (num1, num2, operation) => {
