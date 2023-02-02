@@ -32,12 +32,15 @@ const arr = Array(length)
 performance.mark('start');
 const part = Math.floor(length / scoreCount);
 let i = 0;
-let cnt = 0;
-while (i <= length) {
+const promises = [];
+while (i < length) {
   const arrayPart = arr.slice(i, i + part);
-  cnt += await workerFunction(arrayPart);
+  promises.push(workerFunction(arrayPart));
   i += part;
 };
+
+const cnt = await Promise.all(promises)
+  .then((counts) => counts.reduce((acc, item) => acc + item), 0);
 console.log(cnt);
 
 performance.mark('end');
