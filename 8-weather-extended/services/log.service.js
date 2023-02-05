@@ -21,23 +21,31 @@ const printHelp = () => {
 	);
 };
 
+const mappingToLang = {
+  'en': 
+    { weatherInfo: (city) => `Weather in ${city}:`,
+      tempInfo: (temp, feels_like) => `The temperature is ${temp} C. It feels like ${feels_like} C.`,
+      humidityInfo: (humidity) => `Humidity is ${humidity}%.`,
+    },
+    'ru': 
+    { weatherInfo: (city) => `Погода в городе ${city}:`,
+      tempInfo: (temp, feels_like) => `Температура ${temp} C. Ощущается как ${feels_like} C.`,
+      humidityInfo: (humidity) => `Влажность ${humidity}%.`,
+    },
+};
+
 const printWeather = (data, icon, lang) => {
   const { main, weather } = data;
   const [{ description }] = weather;
   const { temp, feels_like, humidity } = main;
   
   const info = `${chalk.bgMagenta(' WEATHER ')}`;
-  if (lang === 'en') {
-    console.log(dedent`${info} Weather in ${data.name}:
-    ${icon} ${description}
-    The temperature is ${temp} C. It feels like ${feels_like} C.
-    Humidity is ${humidity}%.`);
-  } else {
-    console.log(dedent`${info} Погода в городе ${data.name}:
-    ${icon} ${description}
-    Температура ${temp} C. Ощущается как ${feels_like} C.
-    Влажность ${humidity}%.`);
-  }
+
+  console.log(dedent`${info} ${mappingToLang[lang].weatherInfo(data.name)}
+  ${icon} ${description}
+  ${mappingToLang[lang].tempInfo(temp, feels_like)}
+  ${mappingToLang[lang].humidityInfo(humidity)}
+  `);
 };
 
 export { printError, printSuccess, printHelp, printWeather };
