@@ -29,7 +29,6 @@ const arr = Array(length)
   .map(() => Math.floor(Math.random() * 100));
 
 // 8 threads
-performance.mark('start');
 const part = Math.floor(length / scoreCount);
 let i = 0;
 const promises = [];
@@ -39,6 +38,7 @@ while (i < length) {
   i += part;
 };
 
+performance.mark('start');
 const cnt = await Promise.all(promises)
   .then((counts) => counts.reduce((acc, item) => acc + item), 0);
 console.log(cnt);
