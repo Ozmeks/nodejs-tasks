@@ -1,3 +1,3 @@
 .DS_Store
-/node_modules
-/dist
+/10-weather-typscript/node_modules/
+/10-weather-typscript/dist
