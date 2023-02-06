@@ -1,8 +1,8 @@
 {
-  "name": "calcs",
+  "name": "7-time-notifications",
   "version": "1.0.0",
   "description": "",
-  "main": "/3-calc/index.js",
+  "main": "index.js",
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
