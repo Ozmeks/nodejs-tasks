@@ -7,18 +7,18 @@ const performanceOserver = new PerformanceObserver((items) => {
     console.log(`${name} : ${duration}`);
   });
 });
-performanceOserver.observe({ entryTypes: ['measure']});
+performanceOserver.observe({ entryTypes: ['measure'] });
 
 const workerFunction = (array) => {
-	return new Promise((resolve, reject) => {
-		const worker = new Worker('./worker.js', { workerData: { array } });
-		worker.on('message', (msg) => {
-			resolve(msg);
-		});
+  return new Promise((resolve, reject) => {
+    const worker = new Worker('./worker.js', { workerData: { array } });
+    worker.on('message', (msg) => {
+      resolve(msg);
+    });
     worker.on('error', (err) => {
-			reject(err);
-		});
-	});
+      reject(err);
+    });
+  });
 };
 
 const scoreCount = 8;
@@ -36,11 +36,10 @@ while (i < length) {
   const arrayPart = arr.slice(i, i + part);
   promises.push(workerFunction(arrayPart));
   i += part;
-};
+}
 
 performance.mark('start');
-const cnt = await Promise.all(promises)
-  .then((counts) => counts.reduce((acc, item) => acc + item), 0);
+const cnt = await Promise.all(promises).then((counts) => counts.reduce((acc, item) => acc + item), 0);
 console.log(cnt);
 
 performance.mark('end');
@@ -48,8 +47,7 @@ performance.measure('divideBy3 8 threads', 'start', 'end');
 
 // 1 thread
 performance.mark('start 1 thread');
-const calcNumbers = (array) => 
-  array.filter((i) => i % 3 === 0).length;
+const calcNumbers = (array) => array.filter((i) => i % 3 === 0).length;
 console.log(calcNumbers(arr));
 
 performance.mark('end 1 thread');

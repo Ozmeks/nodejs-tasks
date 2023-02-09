@@ -11,5 +11,9 @@
   "license": "ISC",
   "dependencies": {
     "node-notifier": "^10.0.1"
+  },
+  "prettier": {
+    "printWidth": 120,
+    "singleQuote": true
   }
 }
