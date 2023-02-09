@@ -1,2 +1,2 @@
 .DS_Store
-/7-timer-notifications/node_modules
+**/node_modules/

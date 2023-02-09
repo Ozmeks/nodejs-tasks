@@ -1,5 +1,5 @@
 {
-  "name": "5-multithreads",
+  "name": "9-weather-api",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -7,16 +7,12 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/Ozmeks/nodejs-tasks.git"
-  },
   "author": "ozmeks",
   "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/Ozmeks/nodejs-tasks/issues"
+  "dependencies": {
+    "axios": "^1.2.6",
+    "express": "^4.18.2"
   },
-  "homepage": "https://github.com/Ozmeks/nodejs-tasks#readme",
   "prettier": {
     "printWidth": 120,
     "singleQuote": true
