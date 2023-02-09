@@ -16,5 +16,9 @@
   "bugs": {
     "url": "https://github.com/Ozmeks/nodejs-tasks/issues"
   },
-  "homepage": "https://github.com/Ozmeks/nodejs-tasks#readme"
+  "homepage": "https://github.com/Ozmeks/nodejs-tasks#readme",
+  "prettier": {
+    "printWidth": 120,
+    "singleQuote": true
+  }
 }
