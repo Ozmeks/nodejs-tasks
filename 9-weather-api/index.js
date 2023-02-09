@@ -15,7 +15,7 @@ app.patch('/weather', async (req, res) => {
   if (cities) {
     const arrayOfCities = Array.isArray(cities) ? cities : [cities];
     await saveKeyValue(TOKEN_DICTIONARY.cities, arrayOfCities);
-  };
+  }
   const { token } = req.query;
   if (token) {
     await saveKeyValue(TOKEN_DICTIONARY.token, token);
@@ -29,9 +29,8 @@ app.patch('/weather', async (req, res) => {
 
 app.use((err, req, res, next) => {
   console.error(err.message);
-  res.status(500)
-    .send(err.message);
-})
+  res.status(500).send(err.message);
+});
 
 app.listen(port, () => {
   console.log(`Server started on http://localhost:${port}`);
