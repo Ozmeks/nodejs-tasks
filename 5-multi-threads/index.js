@@ -1,5 +1,6 @@
 import { performance, PerformanceObserver } from "perf_hooks";
 import { Worker } from "worker_threads";
+import { cpus } from "os";
 
 // Perfprmance observer
 const performanceObserver = new PerformanceObserver((items) => {
@@ -23,9 +24,10 @@ const workerFunction = (array) => {
 
 // Initial array
 const length = 300000;
-const arr = Array(length)
-  .fill()
-  .map(() => Math.floor(Math.random() * 100));
+const arr = [];
+for (let i = 0; i < length; i += 1) {
+  arr.push(i);
+}
 
 // One thread check performance
 performance.mark("start");
@@ -35,7 +37,7 @@ performance.mark("end");
 performance.measure("One thread", "start", "end");
 
 // Workers check performance
-const scoreCount = 8;
+const scoreCount = cpus().length;
 const part = arr.length / scoreCount;
 const promises = [];
 let i = 0;
