@@ -15,4 +15,5 @@ const timer = (time) => {
   }, milliseconds);
 };
 
-export default timer;
+const [, , time] = process.argv;
+timer(time);
