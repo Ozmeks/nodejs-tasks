@@ -1,0 +1,15 @@
+{
+  "name": "timer-notifications",
+  "version": "1.0.0",
+  "description": "",
+  "license": "ISC",
+  "author": "ozmeks",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "node-notifier": "^10.0.1"
+  }
+}
