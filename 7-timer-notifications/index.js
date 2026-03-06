@@ -23,5 +23,5 @@ const timer = (time) => {
   }, milliseconds);
 };
 
-const [, , ] = process.argv;
+const [, , time] = process.argv;
 timer(time);
