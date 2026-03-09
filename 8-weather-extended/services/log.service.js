@@ -9,24 +9,21 @@ const printSuccess = (message) => {
 	console.log(chalk.bgGreen(' SUCCESS ') + ' ' + message);
 };
 
-const printHelp = () => {
+const printHelp = (m) => {
 	console.log(
 		dedent`${chalk.bgCyan(' HELP ')}
-		Без параметров - вывод погоды
-		-s [CITY] для установки города
-		-h для вывода помощи
-		-t [API_KEY] для сохранения токена
+		${m.help}
 		`
 	);
 };
 
-const printWeather = (res, icon) => {
+const printWeather = (res, icon, m) => {
 	console.log(
-		dedent`${chalk.bgYellow(' WEATHER ')} Погода в городе ${res.name}
-		${icon}  ${res.weather[0].description}
-		Температура: ${res.main.temp} (ощущается как ${res.main.feels_like})
-		Влажность: ${res.main.humidity}%
-		Скорость ветра: ${res.wind.speed}
+    dedent`${chalk.bgYellow(' WEATHER ')} ${m.weatherTitle} ${res.name}
+    ${icon}  ${res.weather[0].description}
+    ${m.temperature}: ${res.main.temp} (${m.feelsLike} ${res.main.feels_like})
+    ${m.humidity}: ${res.main.humidity}%
+    ${m.windSpeed}: ${res.wind.speed}
 		`
 	);
 };
