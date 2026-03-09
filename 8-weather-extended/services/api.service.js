@@ -25,6 +25,11 @@ const getIcon = (icon) => {
 	}
 };
 
+const getWeatherForCities = (cities, language) => {
+  const promises = cities.map((city) => getWeather(city, language));
+  return Promise.all(promises);
+}
+
 const getWeather = async (city, language) => {
 	const token = process.env.TOKEN ?? await getKeyValue(TOKEN_DICTIONARY.token);
 	if (!token) {
@@ -41,4 +46,4 @@ const getWeather = async (city, language) => {
 	return data;
 };
 
-export { getWeather, getIcon };
+export { getWeatherForCities, getIcon };

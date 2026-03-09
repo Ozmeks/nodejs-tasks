@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 import { getArgs } from './helpers/args.js';
-import { getWeather, getIcon } from './services/api.service.js';
+import { getWeatherForCities, getIcon } from './services/api.service.js';
 import { printHelp, printSuccess, printError, printWeather } from './services/log.service.js';
 import { saveKeyValue, TOKEN_DICTIONARY, getKeyValue } from './services/storage.service.js';
 import { getMessage } from './helpers/locales.js';
@@ -24,8 +24,28 @@ const saveCity = async (city, m) => {
 		return;
 	}
 	try {
-		await saveKeyValue(TOKEN_DICTIONARY.city, city);
+		const existing = await getKeyValue(TOKEN_DICTIONARY.city) ?? [];
+    if (!existing.includes(city)) {
+      await saveKeyValue(TOKEN_DICTIONARY.city, [...existing, city]);
+    }
 		printSuccess(m.citySaved);
+	} catch (e) {
+		printError(e.message);
+	}
+}
+
+const deleteCity = async (city, m) => {
+	if (!city.length) {
+		printError(m.noCity);
+		return;
+	}
+	try {
+		const existing = await getKeyValue(TOKEN_DICTIONARY.city) ?? [];
+    if (existing.includes(city)) {
+      const newArray = existing.filter((el) => el !== city);
+      await saveKeyValue(TOKEN_DICTIONARY.city, newArray);
+    }
+		printSuccess(m.cityDeleted);
 	} catch (e) {
 		printError(e.message);
 	}
@@ -47,10 +67,17 @@ const saveLanguage = async (language, m) => {
 
 const getForecast = async (m) => {
 	try {
-		const city = process.env.CITY ?? await getKeyValue(TOKEN_DICTIONARY.city);
+		const cities = await getKeyValue(TOKEN_DICTIONARY.city) ?? [];
+    if (!cities.length) {
+      printError(m.noCity);
+      return;
+    }
+
     const language = await getKeyValue(TOKEN_DICTIONARY.language) ?? 'en';
-		const weather = await getWeather(city, language);
-		printWeather(weather, getIcon(weather.weather[0].icon), m);
+    const results = await getWeatherForCities(cities, language);
+    results.forEach(weather => {
+      printWeather(weather, getIcon(weather.weather[0].icon), m);
+    });
 	} catch (e) {
 		if (e?.response?.status == 404) {
 			printError(m.wrongCity);
@@ -73,6 +100,9 @@ const initCLI = async () => {
 	}
 	if (args.s) {
 		return saveCity(args.s, m);
+	}
+  if (args.d) {
+		return deleteCity(args.d, m);
 	}
 	if (args.t) {
 		return saveToken(args.t, m);
