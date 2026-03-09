@@ -1,63 +1,116 @@
 #!/usr/bin/env node
 import { getArgs } from './helpers/args.js';
-import { getWeather, getIcon } from './services/api.service.js';
+import { getWeatherForCities, getIcon } from './services/api.service.js';
 import { printHelp, printSuccess, printError, printWeather } from './services/log.service.js';
 import { saveKeyValue, TOKEN_DICTIONARY, getKeyValue } from './services/storage.service.js';
+import { getMessage } from './helpers/locales.js';
 
-const saveToken = async (token) => {
+const saveToken = async (token, m) => {
 	if (!token.length) {
-		printError('Не передан token');
+		printError(m.noToken);
 		return;
 	}
 	try {
 		await saveKeyValue(TOKEN_DICTIONARY.token, token);
-		printSuccess('Токен сохранён');
+		printSuccess(m.tokenSaved);
 	} catch (e) {
 		printError(e.message);
 	}
 }
 
-const saveCity = async (city) => {
+const saveCity = async (city, m) => {
 	if (!city.length) {
-		printError('Не передан город');
+		printError(m.noCity);
 		return;
 	}
 	try {
-		await saveKeyValue(TOKEN_DICTIONARY.city, city);
-		printSuccess('Город сохранён');
+		const existing = await getKeyValue(TOKEN_DICTIONARY.city) ?? [];
+    if (!existing.includes(city)) {
+      await saveKeyValue(TOKEN_DICTIONARY.city, [...existing, city]);
+    }
+		printSuccess(m.citySaved);
 	} catch (e) {
 		printError(e.message);
 	}
 }
 
-const getForecast = async () => {
+const deleteCity = async (city, m) => {
+	if (!city.length) {
+		printError(m.noCity);
+		return;
+	}
 	try {
-		const city = process.env.CITY ?? await getKeyValue(TOKEN_DICTIONARY.city);
-		const weather = await getWeather(city);
-		printWeather(weather, getIcon(weather.weather[0].icon));
+		const existing = await getKeyValue(TOKEN_DICTIONARY.city) ?? [];
+    if (existing.includes(city)) {
+      const newArray = existing.filter((el) => el !== city);
+      await saveKeyValue(TOKEN_DICTIONARY.city, newArray);
+    }
+		printSuccess(m.cityDeleted);
+	} catch (e) {
+		printError(e.message);
+	}
+}
+
+const saveLanguage = async (language, m) => {
+	if (!language.length) {
+		printError(m.noLanguage);
+		return;
+	}
+  try {
+		await saveKeyValue(TOKEN_DICTIONARY.language, language);
+    const newM = getMessage(language);
+		printSuccess(newM.languageSaved);
+	} catch (e) {
+		printError(e.message);
+	}
+};
+
+const getForecast = async (m) => {
+	try {
+		const cities = await getKeyValue(TOKEN_DICTIONARY.city) ?? [];
+    if (!cities.length) {
+      printError(m.noCity);
+      return;
+    }
+
+    const language = await getKeyValue(TOKEN_DICTIONARY.language) ?? 'en';
+    const results = await getWeatherForCities(cities, language);
+    results.forEach(weather => {
+      printWeather(weather, getIcon(weather.weather[0].icon), m);
+    });
 	} catch (e) {
 		if (e?.response?.status == 404) {
-			printError('Неверно указан город');
+			printError(m.wrongCity);
 		} else if (e?.response?.status == 401) {
-			printError('Неверно указан токен');
+      printError(m.wrongToken);
 		} else {
 			printError(e.message);
 		}
 	}
 }
 
-const initCLI = () => {
+const initCLI = async () => {
 	const args = getArgs(process.argv);
+
+  const lang = await getKeyValue(TOKEN_DICTIONARY.language) ?? 'en';
+  const m = getMessage(lang);
+
 	if (args.h) {
-		return printHelp();
+		return printHelp(m);
 	}
 	if (args.s) {
-		return saveCity(args.s);
+		return saveCity(args.s, m);
+	}
+  if (args.d) {
+		return deleteCity(args.d, m);
 	}
 	if (args.t) {
-		return saveToken(args.t);
+		return saveToken(args.t, m);
 	}
-	return getForecast();
+  if (args.l) {
+		return saveLanguage(args.l, m);
+	}
+	return getForecast(m);
 };
 
 initCLI();
