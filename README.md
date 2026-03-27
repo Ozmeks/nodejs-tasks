@@ -13,3 +13,4 @@ A collection of small Node.js exercises, organized by topic.
 | `7-timer-notification` | Simple timer with an external npm package |
 | `8-weather-extended` | Console app with weather forecasts |
 | `9-weather-API` | Web app with weather forecasts |
+| `10-weather-typescript` | Console app with weather forecasts (TypeScript) |
